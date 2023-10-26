@@ -4,7 +4,7 @@ defmodule Domainatrex.Mixfile do
   def project do
     [
       app: :domainatrex,
-      version: "3.0.0",
+      version: "3.0.2",
       elixir: "~> 1.3",
       test_coverage: [tool: ExCoveralls],
       build_embedded: Mix.env() == :prod,
@@ -35,7 +35,7 @@ defmodule Domainatrex.Mixfile do
   defp deps do
     [
       {:ex_doc, "~> 0.19", only: [:dev, :docs]},
-      {:excoveralls, "~> 0.10.3", only: [:dev, :test]},
+      {:excoveralls, "~> 0.18.0", only: [:dev, :test]},
       {:inch_ex, "~> 1.0", only: [:dev, :docs]},
       {:nimble_parsec, "~> 0.4.0", only: [:dev, :docs]}
     ]
