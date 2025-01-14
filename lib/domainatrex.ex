@@ -16,11 +16,13 @@ defmodule Domainatrex do
 
   require Logger
 
-  fallback_local_copy = Application.compile_env(
-                         :domainatrex,
-                         :fallback_local_copy,
-                         "lib/public_suffix_list.dat"
-                       )
+  fallback_local_copy =
+    Application.compile_env(
+      :domainatrex,
+      :fallback_local_copy,
+      "lib/public_suffix_list.dat"
+    )
+
   @fetch_latest Application.compile_env(:domainatrex, :fetch_latest, true)
   @public_suffix_list nil
 
@@ -80,200 +82,306 @@ defmodule Domainatrex do
     |> Enum.sort_by(&length/1)
     |> Enum.reverse()
 
-  Enum.each(suffixes, fn suffix ->
+  Enum.reduce(suffixes, %{}, fn suffix, acc ->
     if List.last(suffix) == "*" do
       case length(suffix) do
         2 ->
-          defp match([unquote(Enum.at(suffix, 0)), a]) do
-            format_response([unquote(Enum.at(suffix, 0))], [a])
-          end
+          key = [Enum.at(suffix, 0)]
 
-          defp match([unquote(Enum.at(suffix, 0)), a, b]) do
-            format_response([unquote(Enum.at(suffix, 0))], [a, b])
-          end
+          if not Map.has_key?(acc, key) do
+            defp match([unquote(Enum.at(suffix, 0)), a]) do
+              format_response([unquote(Enum.at(suffix, 0))], [a])
+            end
 
-          defp match([unquote(Enum.at(suffix, 0)) | _] = args) do
-            format_response(Enum.slice(args, 0, 2), Enum.slice(args, 2, 10))
+            defp match([unquote(Enum.at(suffix, 0)), a, b]) do
+              format_response([unquote(Enum.at(suffix, 0))], [a, b])
+            end
+
+            defp match([unquote(Enum.at(suffix, 0)) | _] = args) do
+              format_response(Enum.slice(args, 0, 2), Enum.slice(args, 2, 10))
+            end
+
+            Map.put(acc, key, true)
+          else
+            acc
           end
 
         3 ->
-          defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)), a]) do
-            format_response([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1))], [a])
-          end
+          key = [Enum.at(suffix, 0), Enum.at(suffix, 1)]
 
-          defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)), a, b]) do
-            format_response([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1))], [a, b])
-          end
+          if not Map.has_key?(acc, key) do
+            defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)), a]) do
+              format_response([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1))], [a])
+            end
 
-          defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)) | _] = args) do
-            format_response(Enum.slice(args, 0, 3), Enum.slice(args, 3, 10))
+            defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)), a, b]) do
+              format_response([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1))], [a, b])
+            end
+
+            defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)) | _] = args) do
+              format_response(Enum.slice(args, 0, 3), Enum.slice(args, 3, 10))
+            end
+
+            Map.put(acc, key, true)
+          else
+            acc
           end
 
         4 ->
-          defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)), a]) do
-            format_response([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1))], [a])
-          end
+          key = [Enum.at(suffix, 0), Enum.at(suffix, 1)]
 
-          defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)), a, b]) do
-            format_response([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1))], [a, b])
-          end
+          if not Map.has_key?(acc, key) do
+            defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)), a]) do
+              format_response([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1))], [a])
+            end
 
-          defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)) | _] = args) do
-            format_response(Enum.slice(args, 0, 4), Enum.slice(args, 4, 10))
+            defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)), a, b]) do
+              format_response([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1))], [a, b])
+            end
+
+            defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)) | _] = args) do
+              format_response(Enum.slice(args, 0, 4), Enum.slice(args, 4, 10))
+            end
+
+            Map.put(acc, key, true)
+          else
+            acc
           end
 
         5 ->
-          defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)), a]) do
-            format_response([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1))], [a])
-          end
+          key = [Enum.at(suffix, 0), Enum.at(suffix, 1)]
 
-          defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)), a, b]) do
-            format_response([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1))], [a, b])
-          end
+          if not Map.has_key?(acc, key) do
+            defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)), a]) do
+              format_response([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1))], [a])
+            end
 
-          defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)) | _] = args) do
-            format_response(Enum.slice(args, 0, 5), Enum.slice(args, 5, 10))
+            defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)), a, b]) do
+              format_response([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1))], [a, b])
+            end
+
+            defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)) | _] = args) do
+              format_response(Enum.slice(args, 0, 5), Enum.slice(args, 5, 10))
+            end
+
+            Map.put(acc, key, true)
+          else
+            acc
           end
 
         6 ->
-          defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)), a]) do
-            format_response([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1))], [a])
-          end
+          key = [Enum.at(suffix, 0), Enum.at(suffix, 1)]
 
-          defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)), a, b]) do
-            format_response([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1))], [a, b])
-          end
+          if not Map.has_key?(acc, key) do
+            defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)), a]) do
+              format_response([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1))], [a])
+            end
 
-          defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)) | _] = args) do
-            format_response(Enum.slice(args, 0, 6), Enum.slice(args, 6, 10))
+            defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)), a, b]) do
+              format_response([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1))], [a, b])
+            end
+
+            defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)) | _] = args) do
+              format_response(Enum.slice(args, 0, 6), Enum.slice(args, 6, 10))
+            end
+
+            Map.put(acc, key, true)
+          else
+            acc
           end
 
         7 ->
-          defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)), a]) do
-            format_response([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1))], [a])
-          end
+          key = [Enum.at(suffix, 0), Enum.at(suffix, 1)]
 
-          defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)), a, b]) do
-            format_response([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1))], [a, b])
-          end
+          if not Map.has_key?(acc, key) do
+            defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)), a]) do
+              format_response([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1))], [a])
+            end
 
-          defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)) | _] = args) do
-            format_response(Enum.slice(args, 0, 7), Enum.slice(args, 7, 10))
+            defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)), a, b]) do
+              format_response([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1))], [a, b])
+            end
+
+            defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)) | _] = args) do
+              format_response(Enum.slice(args, 0, 7), Enum.slice(args, 7, 10))
+            end
+
+            Map.put(acc, key, true)
+          else
+            acc
           end
       end
     else
       case length(suffix) do
         1 ->
-          defp match([unquote(Enum.at(suffix, 0)) | tail] = args) do
-            format_response([Enum.at(args, 0)], tail)
+          key = [Enum.at(suffix, 0)]
+
+          if not Map.has_key?(acc, key) do
+            defp match([unquote(Enum.at(suffix, 0)) | tail] = args) do
+              format_response([Enum.at(args, 0)], tail)
+            end
+
+            Map.put(acc, key, true)
+          else
+            acc
           end
 
         2 ->
-          defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)) | tail] = args) do
-            format_response([Enum.at(args, 0), Enum.at(args, 1)], tail)
+          key = [Enum.at(suffix, 0), Enum.at(suffix, 1)]
+
+          if not Map.has_key?(acc, key) do
+            defp match([unquote(Enum.at(suffix, 0)), unquote(Enum.at(suffix, 1)) | tail] = args) do
+              format_response([Enum.at(args, 0), Enum.at(args, 1)], tail)
+            end
+
+            Map.put(acc, key, true)
+          else
+            acc
           end
 
         3 ->
-          defp match(
-                 [
-                   unquote(Enum.at(suffix, 0)),
-                   unquote(Enum.at(suffix, 1)),
-                   unquote(Enum.at(suffix, 2)) | tail
-                 ] = args
-               ) do
-            format_response([Enum.at(args, 0), Enum.at(args, 1), Enum.at(args, 2)], tail)
+          key = [Enum.at(suffix, 0), Enum.at(suffix, 1)]
+
+          if not Map.has_key?(acc, key) do
+            defp match(
+                   [
+                     unquote(Enum.at(suffix, 0)),
+                     unquote(Enum.at(suffix, 1)),
+                     unquote(Enum.at(suffix, 2)) | tail
+                   ] = args
+                 ) do
+              format_response([Enum.at(args, 0), Enum.at(args, 1), Enum.at(args, 2)], tail)
+            end
+
+            Map.put(acc, key, true)
+          else
+            acc
           end
 
         4 ->
-          defp match(
-                 [
-                   unquote(Enum.at(suffix, 0)),
-                   unquote(Enum.at(suffix, 1)),
-                   unquote(Enum.at(suffix, 2)),
-                   unquote(Enum.at(suffix, 3)) | tail
-                 ] = args
-               ) do
-            format_response(
-              [Enum.at(args, 0), Enum.at(args, 1), Enum.at(args, 2), Enum.at(args, 3)],
-              tail
-            )
+          key = [Enum.at(suffix, 0), Enum.at(suffix, 1)]
+
+          if not Map.has_key?(acc, key) do
+            defp match(
+                   [
+                     unquote(Enum.at(suffix, 0)),
+                     unquote(Enum.at(suffix, 1)),
+                     unquote(Enum.at(suffix, 2)),
+                     unquote(Enum.at(suffix, 3)) | tail
+                   ] = args
+                 ) do
+              format_response(
+                [Enum.at(args, 0), Enum.at(args, 1), Enum.at(args, 2), Enum.at(args, 3)],
+                tail
+              )
+            end
+
+            Map.put(acc, key, true)
+          else
+            acc
           end
 
         5 ->
-          defp match(
-                 [
-                   unquote(Enum.at(suffix, 0)),
-                   unquote(Enum.at(suffix, 1)),
-                   unquote(Enum.at(suffix, 2)),
-                   unquote(Enum.at(suffix, 3)),
-                   unquote(Enum.at(suffix, 4)) | tail
-                 ] = args
-               ) do
-            format_response(
-              [
-                Enum.at(args, 0),
-                Enum.at(args, 1),
-                Enum.at(args, 2),
-                Enum.at(args, 3),
-                Enum.at(args, 4)
-              ],
-              tail
-            )
+          key = [Enum.at(suffix, 0), Enum.at(suffix, 1)]
+
+          if not Map.has_key?(acc, key) do
+            defp match(
+                   [
+                     unquote(Enum.at(suffix, 0)),
+                     unquote(Enum.at(suffix, 1)),
+                     unquote(Enum.at(suffix, 2)),
+                     unquote(Enum.at(suffix, 3)),
+                     unquote(Enum.at(suffix, 4)) | tail
+                   ] = args
+                 ) do
+              format_response(
+                [
+                  Enum.at(args, 0),
+                  Enum.at(args, 1),
+                  Enum.at(args, 2),
+                  Enum.at(args, 3),
+                  Enum.at(args, 4)
+                ],
+                tail
+              )
+            end
+
+            Map.put(acc, key, true)
+          else
+            acc
           end
 
         6 ->
-          defp match(
-                 [
-                   unquote(Enum.at(suffix, 0)),
-                   unquote(Enum.at(suffix, 1)),
-                   unquote(Enum.at(suffix, 2)),
-                   unquote(Enum.at(suffix, 3)),
-                   unquote(Enum.at(suffix, 4)),
-                   unquote(Enum.at(suffix, 5)) | tail
-                 ] = args
-               ) do
-            format_response(
-              [
-                Enum.at(args, 0),
-                Enum.at(args, 1),
-                Enum.at(args, 2),
-                Enum.at(args, 3),
-                Enum.at(args, 4),
-                Enum.at(args, 5)
-              ],
-              tail
-            )
+          key = [Enum.at(suffix, 0), Enum.at(suffix, 1)]
+
+          if not Map.has_key?(acc, key) do
+            defp match(
+                   [
+                     unquote(Enum.at(suffix, 0)),
+                     unquote(Enum.at(suffix, 1)),
+                     unquote(Enum.at(suffix, 2)),
+                     unquote(Enum.at(suffix, 3)),
+                     unquote(Enum.at(suffix, 4)),
+                     unquote(Enum.at(suffix, 5)) | tail
+                   ] = args
+                 ) do
+              format_response(
+                [
+                  Enum.at(args, 0),
+                  Enum.at(args, 1),
+                  Enum.at(args, 2),
+                  Enum.at(args, 3),
+                  Enum.at(args, 4),
+                  Enum.at(args, 5)
+                ],
+                tail
+              )
+            end
+
+            Map.put(acc, key, true)
+          else
+            acc
           end
 
         7 ->
-          defp match(
-                 [
-                   unquote(Enum.at(suffix, 0)),
-                   unquote(Enum.at(suffix, 1)),
-                   unquote(Enum.at(suffix, 2)),
-                   unquote(Enum.at(suffix, 3)),
-                   unquote(Enum.at(suffix, 4)),
-                   unquote(Enum.at(suffix, 5)),
-                   unquote(Enum.at(suffix, 6)) | tail
-                 ] = args
-               ) do
-            format_response(
-              [
-                Enum.at(args, 0),
-                Enum.at(args, 1),
-                Enum.at(args, 2),
-                Enum.at(args, 3),
-                Enum.at(args, 4),
-                Enum.at(args, 5),
-                Enum.at(args, 6)
-              ],
-              tail
-            )
+          key = [Enum.at(suffix, 0), Enum.at(suffix, 1)]
+
+          if not Map.has_key?(acc, key) do
+            defp match(
+                   [
+                     unquote(Enum.at(suffix, 0)),
+                     unquote(Enum.at(suffix, 1)),
+                     unquote(Enum.at(suffix, 2)),
+                     unquote(Enum.at(suffix, 3)),
+                     unquote(Enum.at(suffix, 4)),
+                     unquote(Enum.at(suffix, 5)),
+                     unquote(Enum.at(suffix, 6)) | tail
+                   ] = args
+                 ) do
+              format_response(
+                [
+                  Enum.at(args, 0),
+                  Enum.at(args, 1),
+                  Enum.at(args, 2),
+                  Enum.at(args, 3),
+                  Enum.at(args, 4),
+                  Enum.at(args, 5),
+                  Enum.at(args, 6)
+                ],
+                tail
+              )
+            end
+
+            Map.put(acc, key, true)
+          else
+            acc
           end
 
         _ ->
           {:error, "There exists a domain in the list which contains more than 7 dots: #{suffix}"}
       end
+
+      acc
     end
   end)
 
