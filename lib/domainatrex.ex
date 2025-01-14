@@ -16,7 +16,7 @@ defmodule Domainatrex do
 
   require Logger
 
-  @fallback_local_copy Application.compile_env(
+  fallback_local_copy = Application.compile_env(
                          :domainatrex,
                          :fallback_local_copy,
                          "lib/public_suffix_list.dat"
@@ -38,11 +38,11 @@ defmodule Domainatrex do
     @public_suffix_list to_string(string)
   else
     _ ->
-      case File.read(@fallback_local_copy) do
+      case File.read(fallback_local_copy) do
         {:ok, string} ->
           if @fetch_latest do
             Logger.error(
-              "[Domainatrex] Could not read the public suffix list from the internet, trying to read from the backup at #{@fallback_local_copy}"
+              "[Domainatrex] Could not read the public suffix list from the internet, trying to read from the backup at #{fallback_local_copy}"
             )
           end
 
@@ -50,7 +50,7 @@ defmodule Domainatrex do
 
         _ ->
           Logger.error(
-            "[Domainatrex] Could not read the public suffix list, please make sure that you either have an internet connection or #{@fallback_local_copy} exists"
+            "[Domainatrex] Could not read the public suffix list, please make sure that you either have an internet connection or #{fallback_local_copy} exists"
           )
 
           @public_suffix_list nil
